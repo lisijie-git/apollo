@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Apollo Authors
+ * Copyright 2022 Apollo Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,6 +56,8 @@ public class ConfigUtil {
   private boolean autoUpdateInjectedSpringProperties = true;
   private final RateLimiter warnLogRateLimiter;
   private boolean propertiesOrdered = false;
+  private boolean propertyNamesCacheEnabled = false;
+  private boolean propertyFileCacheEnabled = true;
 
   public ConfigUtil() {
     warnLogRateLimiter = RateLimiter.create(0.017); // 1 warning log output per minute
@@ -68,6 +70,8 @@ public class ConfigUtil {
     initLongPollingInitialDelayInMills();
     initAutoUpdateInjectedSpringProperties();
     initPropertiesOrdered();
+    initPropertyNamesCacheEnabled();
+    initPropertyFileCacheEnabled();
   }
 
   /**
@@ -85,6 +89,15 @@ public class ConfigUtil {
       }
     }
     return appId;
+  }
+
+  /**
+   * Get the apollo label for the current application.
+   *
+   * @return apollo Label
+   */
+  public String getApolloLabel() {
+    return Foundation.app().getApolloLabel();
   }
 
   /**
@@ -393,5 +406,44 @@ public class ConfigUtil {
 
   public boolean isPropertiesOrderEnabled() {
     return propertiesOrdered;
+  }
+
+  public boolean isPropertyNamesCacheEnabled() {
+    return propertyNamesCacheEnabled;
+  }
+
+  public boolean isPropertyFileCacheEnabled() {
+    return propertyFileCacheEnabled;
+  }
+
+  private void initPropertyNamesCacheEnabled() {
+    propertyNamesCacheEnabled = getPropertyBoolean(ApolloClientSystemConsts.APOLLO_PROPERTY_NAMES_CACHE_ENABLE,
+            ApolloClientSystemConsts.APOLLO_PROPERTY_NAMES_CACHE_ENABLE_ENVIRONMENT_VARIABLES,
+            propertyNamesCacheEnabled);
+  }
+
+  private void initPropertyFileCacheEnabled() {
+    propertyFileCacheEnabled = getPropertyBoolean(ApolloClientSystemConsts.APOLLO_CACHE_FILE_ENABLE,
+            ApolloClientSystemConsts.APOLLO_CACHE_FILE_ENABLE_ENVIRONMENT_VARIABLES,
+            propertyFileCacheEnabled);
+  }
+
+  private boolean getPropertyBoolean(String propertyName, String envName, boolean defaultVal) {
+    String enablePropertyNamesCache = System.getProperty(propertyName);
+    if (Strings.isNullOrEmpty(enablePropertyNamesCache)) {
+      enablePropertyNamesCache = System.getenv(envName);
+    }
+    if (Strings.isNullOrEmpty(enablePropertyNamesCache)) {
+      enablePropertyNamesCache = Foundation.app().getProperty(propertyName, null);
+    }
+    if (!Strings.isNullOrEmpty(enablePropertyNamesCache)) {
+      try {
+        return Boolean.parseBoolean(enablePropertyNamesCache);
+      } catch (Throwable ex) {
+        logger.warn("Config for {} is invalid: {}, set default value: {}",
+                propertyName, enablePropertyNamesCache, defaultVal);
+      }
+    }
+    return defaultVal;
   }
 }

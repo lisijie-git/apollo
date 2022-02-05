@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Apollo Authors
+ * Copyright 2022 Apollo Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,8 @@ package com.ctrip.framework.apollo.config.data.extension.webclient;
 import com.ctrip.framework.apollo.config.data.extension.initialize.ApolloClientExtensionInitializer;
 import com.ctrip.framework.apollo.config.data.extension.properties.ApolloClientProperties;
 import com.ctrip.framework.apollo.config.data.extension.webclient.customizer.spi.ApolloClientWebClientCustomizerFactory;
-import com.ctrip.framework.apollo.config.data.extension.webclient.injector.ApolloClientCustomHttpClientInjectorCustomizer;
+import com.ctrip.framework.apollo.config.data.injector.ApolloConfigDataInjectorCustomizer;
+import com.ctrip.framework.apollo.util.http.HttpClient;
 import com.ctrip.framework.foundation.internals.ServiceBootstrap;
 import java.util.List;
 import org.apache.commons.logging.Log;
@@ -62,6 +63,7 @@ public class ApolloClientLongPollingExtensionInitializer implements
         }
       }
     }
-    ApolloClientCustomHttpClientInjectorCustomizer.setCustomWebClient(webClientBuilder.build());
+    HttpClient httpClient = new ApolloWebClientHttpClient(webClientBuilder.build());
+    ApolloConfigDataInjectorCustomizer.registerIfAbsent(HttpClient.class, () -> httpClient);
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Apollo Authors
+ * Copyright 2022 Apollo Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,12 @@
 package com.ctrip.framework.apollo.config.data.importer;
 
 import com.ctrip.framework.apollo.config.data.extension.initialize.ApolloClientExtensionInitializeFactory;
+import com.ctrip.framework.apollo.config.data.injector.ApolloConfigDataInjectorCustomizer;
+import com.ctrip.framework.apollo.config.data.internals.PureApolloConfigFactory;
 import com.ctrip.framework.apollo.config.data.system.ApolloClientSystemPropertyInitializer;
 import com.ctrip.framework.apollo.config.data.util.Slf4jLogMessageFormatter;
 import com.ctrip.framework.apollo.core.utils.DeferredLogger;
+import com.ctrip.framework.apollo.spi.ConfigFactory;
 import com.ctrip.framework.apollo.spring.config.PropertySourcesConstants;
 import java.util.Arrays;
 import java.util.Collections;
@@ -100,6 +103,8 @@ class ApolloConfigDataLoaderInitializer {
     new ApolloClientExtensionInitializeFactory(this.log,
         this.bootstrapContext).initializeExtension(this.binder, this.bindHandler);
     DeferredLogger.enable();
+    ApolloConfigDataInjectorCustomizer.register(ConfigFactory.class,
+        PureApolloConfigFactory::new);
   }
 
   private boolean forceDisableApolloBootstrap() {

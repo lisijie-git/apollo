@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Apollo Authors
+ * Copyright 2022 Apollo Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -135,7 +135,7 @@ public class LdapUserService implements UserService {
   /**
    * 用户信息Mapper
    */
-  private ContextMapper<UserInfo> ldapUserInfoMapper = (ctx) -> {
+  private final ContextMapper<UserInfo> ldapUserInfoMapper = (ctx) -> {
     DirContextAdapter contextAdapter = (DirContextAdapter) ctx;
     UserInfo userInfo = new UserInfo();
     userInfo.setUserId(contextAdapter.getStringAttribute(loginIdAttrName));
@@ -317,9 +317,7 @@ public class LdapUserService implements UserService {
       return Collections.emptyList();
     }
     if (StringUtils.isNotBlank(groupSearch)) {
-      List<UserInfo> userListByGroup = searchUserInfoByGroup(groupBase, groupSearch, null,
-          userIds);
-      return userListByGroup;
+      return searchUserInfoByGroup(groupBase, groupSearch, null, userIds);
     }
     ContainerCriteria criteria = query().where(loginIdAttrName).is(userIds.get(0));
     userIds.stream().skip(1).forEach(userId -> criteria.or(loginIdAttrName).is(userId));

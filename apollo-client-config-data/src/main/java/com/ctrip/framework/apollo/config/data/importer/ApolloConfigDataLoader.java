@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Apollo Authors
+ * Copyright 2022 Apollo Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,8 +74,7 @@ public class ApolloConfigDataLoader implements ConfigDataLoader<ApolloConfigData
     List<PropertySource<?>> propertySourceList = new ArrayList<>();
     propertySourceList.add(configPropertySource);
     propertySourceList.addAll(initialPropertySourceList);
-    log.debug(Slf4jLogMessageFormatter
-        .format("apollo client loaded namespace [{}]", resource.getNamespace()));
+    log.debug(Slf4jLogMessageFormatter.format("apollo client loaded namespace [{}]", namespace));
     return new ConfigData(propertySourceList);
   }
 

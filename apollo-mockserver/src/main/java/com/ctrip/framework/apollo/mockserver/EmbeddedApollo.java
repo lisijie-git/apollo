@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Apollo Authors
+ * Copyright 2022 Apollo Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,7 +66,7 @@ public class EmbeddedApollo extends ExternalResource {
       CONFIG_SERVICE_LOCATOR_CLEAR = ConfigServiceLocator.class.getDeclaredMethod("initConfigServices");
       CONFIG_SERVICE_LOCATOR_CLEAR.setAccessible(true);
     } catch (NoSuchMethodException e) {
-      e.printStackTrace();
+      logger.error(e.getMessage(), e);
     }
   }
 

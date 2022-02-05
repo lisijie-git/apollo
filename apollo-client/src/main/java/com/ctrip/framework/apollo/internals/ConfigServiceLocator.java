@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Apollo Authors
+ * Copyright 2022 Apollo Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -109,7 +109,7 @@ public class ConfigServiceLocator {
       return null;
     }
 
-    logger.warn("Located config services from apollo.config-service configuration: {}, will not refresh config services from remote meta service!", configServices);
+    logger.info("Located config services from apollo.config-service configuration: {}, will not refresh config services from remote meta service!", configServices);
 
     // mock service dto list
     String[] configServiceUrls = configServices.split(",");
