@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Apollo Authors
+ * Copyright 2023 Apollo Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -754,6 +754,7 @@ function directive($window, $translate, toastr, AppUtil, EventManager, Permissio
             }
 
             function modifyByText(namespace) {
+
                 var model = {
                     configText: namespace.editText,
                     namespaceId: namespace.baseInfo.id,
@@ -816,7 +817,6 @@ function directive($window, $translate, toastr, AppUtil, EventManager, Permissio
             }
 
             function parseModel2Text(namespace) {
-
                 if (namespace.items.length == 0) {
                     namespace.itemCnt = 0;
                     return "";
@@ -843,7 +843,7 @@ function directive($window, $translate, toastr, AppUtil, EventManager, Permissio
                 var itemCnt = 0;
                 namespace.items.forEach(function (item) {
                     //deleted key
-                    if (!item.item.dataChangeLastModifiedBy) {
+                    if (item.isDeleted) {
                         return;
                     }
                     if (item.item.key) {
@@ -987,6 +987,20 @@ function directive($window, $translate, toastr, AppUtil, EventManager, Permissio
                         minLines: 10,
                         maxLines: 20
                     })
+                },
+                onChange: function (e) {
+                    if ((e[0].action === 'insert') && (scope.namespace.hasOwnProperty("editText")) && (scope.namespace.editText.length === 0)) {
+                        let text = ''
+                        for (let i = 0; i < e[0].lines.length; i++) {
+                            if (i === 0) {
+                                text = e[0].lines[0]
+                            } else {
+                                text += '\r\n' + e[0].lines[i]
+                            }
+                        }
+                        scope.namespace.editText = text
+                    }
+
                 }
             };
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Apollo Authors
+ * Copyright 2023 Apollo Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import com.ctrip.framework.apollo.openapi.service.ConsumerService;
 import com.ctrip.framework.apollo.portal.environment.Env;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,7 +71,8 @@ public class ConsumerController {
     return consumerService.generateAndSaveConsumerToken(createdConsumer, expires);
   }
 
-  @GetMapping(value = "/consumers/by-appId")
+  @PreAuthorize(value = "@permissionValidator.isSuperAdmin()")
+  @GetMapping(value = "/consumer-tokens/by-appId")
   public ConsumerToken getConsumerTokenByAppId(@RequestParam String appId) {
     return consumerService.getConsumerTokenByAppId(appId);
   }
@@ -103,7 +105,7 @@ public class ConsumerController {
           continue;
         }
         if (Env.UNKNOWN.equals(Env.transformEnv(env))) {
-          throw new BadRequestException(String.format("env: %s is illegal", env));
+          throw BadRequestException.invalidEnvFormat(env);
         }
         envList.add(env);
       }
@@ -118,6 +120,16 @@ public class ConsumerController {
     return consumerService.assignNamespaceRoleToConsumer(token, appId, namespaceName);
   }
 
+  @GetMapping("/consumers")
+  @PreAuthorize(value = "@permissionValidator.isSuperAdmin()")
+  public List<Consumer> getConsumerList(Pageable page){
+    return consumerService.findAllConsumer(page);
+  }
 
+  @DeleteMapping(value = "/consumers/by-appId")
+  @PreAuthorize(value = "@permissionValidator.isSuperAdmin()")
+  public void deleteConsumers(@RequestParam String appId) {
+    consumerService.deleteConsumer(appId);
+  }
 
 }

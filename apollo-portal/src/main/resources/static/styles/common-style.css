@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Apollo Authors
+ * Copyright 2023 Apollo Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -831,7 +831,7 @@ table th {
 
 .left-bar .app-list-show {
     height: 60px;
-    color: #409EFF;
+    color: #337AB7;
     display: flex;
     align-items: center;
     justify-content: left;
@@ -855,7 +855,7 @@ table th {
 
 .left-bar .favorite-list-show {
     height: 60px;
-    color: #409EFF;
+    color: #337AB7;
     display: flex;
     align-items: center;
     justify-content: left;
@@ -878,7 +878,7 @@ table th {
 
 .left-bar .public-namespace-list-show {
     height: 60px;
-    color: #409EFF;
+    color: #337AB7;
     display: flex;
     align-items: center;
     justify-content: left;
@@ -901,7 +901,7 @@ table th {
 
 .left-bar .visited-list-show {
     height: 60px;
-    color: #409EFF;
+    color: #337AB7;
     display: flex;
     align-items: center;
     justify-content: left;
@@ -1140,4 +1140,36 @@ table th {
 .navbar-header .logo {
     height: 35px;
     margin-top: -4px
+}
+
+
+.margin-top10 { margin-top:10px; }
+
+#consumer-list th {
+    border-bottom: 1px solid #E4E7ED;
+    padding: 15px 8px 15px 8px;
+    font-size: 16px;
+    text-align: left;
+    word-break: break-all;
+}
+
+#consumer-list td {
+    border-bottom: 1px solid #E4E7ED;
+    padding: 15px 8px 15px 8px;
+    font-size: 14px;
+    word-break: break-all;
+}
+
+#consumer-list table {
+    margin-left: 20px;
+}
+
+#consumer-list .more-img {
+    width: 20px;
+    height: 20px;
+}
+
+#consumer-list .create-btn img {
+    width: 16px;
+    height: 16px;
 }

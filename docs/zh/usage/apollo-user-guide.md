@@ -345,6 +345,8 @@ Apollo目前提供Java客户端，具体信息请点击[Java客户端使用文�
 
 ![gray-release-ip-selected](https://cdn.jsdelivr.net/gh/apolloconfig/apollo@master/doc/images/gray-release/gray-release-ip-selected.png)
 
+除了IP维度以外，从2.0.0版本开始还支持通过label来标识灰度的实例列表，适用于IP不固定的场景如`Kubernetes`。
+
 手动输入想要设置的label标签，输入完成后点击点击添加按钮。
 
 ![manual-input-gray-release-label](https://cdn.jsdelivr.net/gh/apolloconfig/apollo@master/doc/images/gray-release/manual-input-gray-release-label.png)
@@ -352,6 +354,10 @@ Apollo目前提供Java客户端，具体信息请点击[Java客户端使用文�
 ![manual-input-gray-release-label-2](https://cdn.jsdelivr.net/gh/apolloconfig/apollo@master/doc/images/gray-release/manual-input-gray-release-label2.png)
 
 ![gray-release-rule-saved](https://cdn.jsdelivr.net/gh/apolloconfig/apollo@master/doc/images/gray-release/gray-release-rule-saved.png)
+
+上述规则配置后，灰度配置会对AppId为`100004458`，IP为`10.32.21.22`或者`Label`标记为`myLabel`或`appLabel`的实例生效。
+
+> 关于`Label`如何标记，可以参考[ApolloLabel](zh/usage/java-sdk-user-guide?id=_1247-apollolabel)的配置说明。
 
 如果下拉框中没找到需要的IP，说明机器还没从Apollo取过配置，可以点击手动输入IP来输入，输入完后点击添加按钮
 
@@ -425,7 +431,7 @@ Apollo目前提供Java客户端，具体信息请点击[Java客户端使用文�
 
 配置方式很简单，用超级管理员账号登录后，进入`管理员工具 - 系统参数`页面新增或修改`configView.memberOnly.envs`配置项即可。
 
-![configView.memberOnly.envs](https://user-images.githubusercontent.com/837658/46456519-c155e100-c7e1-11e8-969b-8f332379fa29.png)
+![configView.memberOnly.envs](https://cdn.jsdelivr.net/gh/apolloconfig/apollo@master/doc/images/configure-view-permissions.png)
 
 ## 6.2 配置访问密钥
 
@@ -469,3 +475,4 @@ Apollo 支持细粒度的权限控制，请务必根据实际情况做好权限�
 1. `apollo-configservice`和`apollo-adminservice`是基于内网可信网络设计的，所以出于安全考虑，禁止`apollo-configservice`和`apollo-adminservice`直接暴露在公网
 2. 对敏感配置可以考虑开启[访问秘钥](#_62-%e9%85%8d%e7%bd%ae%e8%ae%bf%e9%97%ae%e5%af%86%e9%92%a5)，从而只有经过身份验证的客户端才能访问敏感配置
 3. 1.7.1及以上版本可以考虑为`apollo-adminservice`开启[访问控制](zh/deployment/distributed-deployment-guide?id=_326-admin-serviceaccesscontrolenabled-配置apollo-adminservice是否开启访问控制)，从而只有[受控的](zh/deployment/distributed-deployment-guide?id=_3112-admin-serviceaccesstokens-设置apollo-portal访问各环境apollo-adminservice所需的access-token)`apollo-portal`才能访问对应接口，增强安全性
+4. 2.1.0及以上版本可以考虑为`eureka`开启[访问控制](zh/deployment/distributed-deployment-guide?id=_329-apolloeurekaserversecurityenabled-配置是否开启eureka-server的登录认证)，从而只有受控的`apollo-configservice`和`apollo-adminservice`可以注册到`eureka`，增强安全性

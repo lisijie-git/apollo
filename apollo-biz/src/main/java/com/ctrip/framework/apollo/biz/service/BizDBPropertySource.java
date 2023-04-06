@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Apollo Authors
+ * Copyright 2023 Apollo Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,15 +41,19 @@ public class BizDBPropertySource extends RefreshablePropertySource {
 
   private static final Logger logger = LoggerFactory.getLogger(BizDBPropertySource.class);
 
-  @Autowired
-  private ServerConfigRepository serverConfigRepository;
+  private final ServerConfigRepository serverConfigRepository;
 
-  public BizDBPropertySource(String name, Map<String, Object> source) {
+  public BizDBPropertySource(final String name,
+      final Map<String, Object> source,
+      final ServerConfigRepository serverConfigRepository) {
     super(name, source);
+    this.serverConfigRepository = serverConfigRepository;
   }
 
-  public BizDBPropertySource() {
+  @Autowired
+  public BizDBPropertySource(final ServerConfigRepository serverConfigRepository) {
     super("DBConfig", Maps.newConcurrentMap());
+    this.serverConfigRepository = serverConfigRepository;
   }
 
   String getCurrentDataCenter() {

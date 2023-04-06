@@ -6,7 +6,7 @@ English | [中文](https://www.apolloconfig.com/#/zh/README)
 
 [![Build Status](https://github.com/apolloconfig/apollo/workflows/build/badge.svg)](https://github.com/apolloconfig/apollo/actions)
 [![GitHub Release](https://img.shields.io/github/release/apolloconfig/apollo.svg)](https://github.com/apolloconfig/apollo/releases)
-[![Maven Central Repo](https://img.shields.io/maven-central/v/com.ctrip.framework.apollo/apollo.svg)](https://mvnrepository.com/artifact/com.ctrip.framework.apollo/apollo-client)
+[![Maven Central Repo](https://img.shields.io/maven-central/v/com.ctrip.framework.apollo/apollo-client.svg)](https://mvnrepository.com/artifact/com.ctrip.framework.apollo/apollo-client)
 [![codecov.io](https://codecov.io/github/apolloconfig/apollo/coverage.svg?branch=master)](https://codecov.io/github/apolloconfig/apollo?branch=master)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
@@ -23,7 +23,7 @@ For more details of the product introduction, please refer [Introduction to Apol
 For local demo purpose, please refer [Quick Start](https://www.apolloconfig.com/#/zh/deployment/quick-start).
 
 Demo Environment:
-- [http://106.54.227.205](http://106.54.227.205/)
+- [http://81.68.181.139](http://81.68.181.139/)
 - User/Password: apollo/admin
 
 # Screenshots
@@ -541,4 +541,4 @@ The project is licensed under the [Apache 2 license](https://github.com/apolloco
 
 # Stargazers over time
 
-[![Stargazers over time](https://starchart.cc/apolloconfig/apollo.svg)](https://starchart.cc/apolloconfig/apollo)
+[![Stargazers over time](https://api.star-history.com/svg?repos=apolloconfig/apollo&type=Date)](https://star-history.com/#apolloconfig/apollo&Date)

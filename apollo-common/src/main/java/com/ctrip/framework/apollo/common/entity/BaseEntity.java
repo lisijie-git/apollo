@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Apollo Authors
+ * Copyright 2023 Apollo Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,70 +38,83 @@ public abstract class BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "Id")
+  @Column(name = "`Id`")
   private long id;
 
-  @Column(name = "IsDeleted", columnDefinition = "Bit default '0'")
+  @Column(name = "`IsDeleted`", columnDefinition = "Bit default '0'")
   protected boolean isDeleted = false;
 
-  @Column(name = "DataChange_CreatedBy", nullable = false)
+  @Column(name = "`DeletedAt`", columnDefinition = "Bigint default '0'")
+  protected long deletedAt;
+
+  @Column(name = "`DataChange_CreatedBy`", nullable = false)
   private String dataChangeCreatedBy;
 
-  @Column(name = "DataChange_CreatedTime", nullable = false)
+  @Column(name = "`DataChange_CreatedTime`", nullable = false)
   private Date dataChangeCreatedTime;
 
-  @Column(name = "DataChange_LastModifiedBy")
+  @Column(name = "`DataChange_LastModifiedBy`")
   private String dataChangeLastModifiedBy;
 
-  @Column(name = "DataChange_LastTime")
+  @Column(name = "`DataChange_LastTime`")
   private Date dataChangeLastModifiedTime;
-
-  public String getDataChangeCreatedBy() {
-    return dataChangeCreatedBy;
-  }
-
-  public Date getDataChangeCreatedTime() {
-    return dataChangeCreatedTime;
-  }
-
-  public String getDataChangeLastModifiedBy() {
-    return dataChangeLastModifiedBy;
-  }
-
-  public Date getDataChangeLastModifiedTime() {
-    return dataChangeLastModifiedTime;
-  }
 
   public long getId() {
     return id;
+  }
+
+  public void setId(long id) {
+    this.id = id;
   }
 
   public boolean isDeleted() {
     return isDeleted;
   }
 
+  public void setDeleted(boolean deleted) {
+    isDeleted = deleted;
+    if (deleted && this.deletedAt == 0) {
+      // also set deletedAt value as epoch millisecond
+      this.deletedAt = System.currentTimeMillis();
+    } else if (!deleted) {
+      this.deletedAt = 0L;
+    }
+  }
+
+  public long getDeletedAt() {
+    return deletedAt;
+  }
+
+  public String getDataChangeCreatedBy() {
+    return dataChangeCreatedBy;
+  }
+
   public void setDataChangeCreatedBy(String dataChangeCreatedBy) {
     this.dataChangeCreatedBy = dataChangeCreatedBy;
+  }
+
+  public Date getDataChangeCreatedTime() {
+    return dataChangeCreatedTime;
   }
 
   public void setDataChangeCreatedTime(Date dataChangeCreatedTime) {
     this.dataChangeCreatedTime = dataChangeCreatedTime;
   }
 
+  public String getDataChangeLastModifiedBy() {
+    return dataChangeLastModifiedBy;
+  }
+
   public void setDataChangeLastModifiedBy(String dataChangeLastModifiedBy) {
     this.dataChangeLastModifiedBy = dataChangeLastModifiedBy;
   }
 
+  public Date getDataChangeLastModifiedTime() {
+    return dataChangeLastModifiedTime;
+  }
+
   public void setDataChangeLastModifiedTime(Date dataChangeLastModifiedTime) {
     this.dataChangeLastModifiedTime = dataChangeLastModifiedTime;
-  }
-
-  public void setDeleted(boolean deleted) {
-    isDeleted = deleted;
-  }
-
-  public void setId(long id) {
-    this.id = id;
   }
 
   @PrePersist

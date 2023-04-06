@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Apollo Authors
+ * Copyright 2023 Apollo Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -119,7 +119,7 @@ public class NamespaceBranchController {
                           @RequestBody NamespaceReleaseModel model) {
 
     if (model.isEmergencyPublish() && !portalConfig.isEmergencyPublishAllowed(Env.valueOf(env))) {
-      throw new BadRequestException(String.format("Env: %s is not supported emergency publish now", env));
+      throw new BadRequestException("Env: %s is not supported emergency publish now", env);
     }
 
     ReleaseDTO createdRelease = namespaceBranchService.merge(appId, Env.valueOf(env), clusterName, namespaceName, branchName,

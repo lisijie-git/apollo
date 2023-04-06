@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Apollo Authors
+ * Copyright 2023 Apollo Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
@@ -32,12 +31,16 @@ import java.io.UnsupportedEncodingException;
 @Component
 public class RestTemplateFactory implements FactoryBean<RestTemplate>, InitializingBean {
 
-  @Autowired
-  private HttpMessageConverters httpMessageConverters;
-  @Autowired
-  private PortalConfig portalConfig;
+  private final HttpMessageConverters httpMessageConverters;
+  private final PortalConfig portalConfig;
 
   private RestTemplate restTemplate;
+
+  public RestTemplateFactory(final HttpMessageConverters httpMessageConverters,
+      final PortalConfig portalConfig) {
+    this.httpMessageConverters = httpMessageConverters;
+    this.portalConfig = portalConfig;
+  }
 
   public RestTemplate getObject() {
     return restTemplate;

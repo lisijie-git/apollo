@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Apollo Authors
+ * Copyright 2023 Apollo Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,16 +38,18 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.hash.Hashing;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
-import org.apache.commons.lang.time.FastDateFormat;
+import java.util.Objects;
+import org.apache.commons.lang3.time.FastDateFormat;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Jason Song(song_s@ctrip.com)
@@ -101,7 +103,7 @@ public class ConsumerService {
     String ownerName = consumer.getOwnerName();
     UserInfo owner = userService.findByUserId(ownerName);
     if (owner == null) {
-      throw new BadRequestException(String.format("User does not exist. UserId = %s", ownerName));
+      throw BadRequestException.userNotExists(ownerName);
     }
     consumer.setOwnerEmail(owner.getEmail());
 
@@ -143,6 +145,7 @@ public class ConsumerService {
     return consumerRepository.findById(consumerId).orElse(null);
   }
 
+  @Transactional
   public List<ConsumerRole> assignNamespaceRoleToConsumer(String token, String appId, String namespaceName) {
     return assignNamespaceRoleToConsumer(token, appId, namespaceName, null);
   }
@@ -247,9 +250,9 @@ public class ConsumerService {
         .getDataChangeCreatedTime(), portalConfig.consumerTokenSalt()));
   }
 
-  String generateToken(String consumerAppId, Date generationTime, String
-      consumerTokenSalt) {
-    return Hashing.sha1().hashString(KEY_JOINER.join(consumerAppId, TIMESTAMP_FORMAT.format
+  @SuppressWarnings("UnstableApiUsage")
+  String generateToken(String consumerAppId, Date generationTime, String consumerTokenSalt) {
+    return Hashing.sha256().hashString(KEY_JOINER.join(consumerAppId, TIMESTAMP_FORMAT.format
         (generationTime), consumerTokenSalt), Charsets.UTF_8).toString();
   }
 
@@ -291,4 +294,27 @@ public class ConsumerService {
 
     return appIds;
   }
+
+  public List<Consumer> findAllConsumer(Pageable page){
+    return this.consumerRepository.findAll(page).getContent();
+  }
+
+  @Transactional
+  public void deleteConsumer(String appId){
+    Consumer consumer = consumerRepository.findByAppId(appId);
+    if (consumer == null) {
+      throw new BadRequestException("ConsumerApp not exist");
+    }
+    long consumerId = consumer.getId();
+    List<ConsumerRole> consumerRoleList = consumerRoleRepository.findByConsumerId(consumerId);
+    ConsumerToken consumerToken = consumerTokenRepository.findByConsumerId(consumerId);
+
+    consumerRoleRepository.deleteAll(consumerRoleList);
+    consumerRepository.delete(consumer);
+
+    if (Objects.nonNull(consumerToken)) {
+      consumerTokenRepository.delete(consumerToken);
+    }
+  }
+
 }

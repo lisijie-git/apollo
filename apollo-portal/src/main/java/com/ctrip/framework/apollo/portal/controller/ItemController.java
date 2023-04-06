@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Apollo Authors
+ * Copyright 2023 Apollo Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -130,7 +130,7 @@ public class ItemController {
 
     // In case someone constructs an attack scenario
     if (namespace == null || item.getNamespaceId() != namespace.getId()) {
-      throw new BadRequestException("Invalid request, item and namespace do not match!");
+      throw BadRequestException.namespaceNotMatch();
     }
 
     configService.deleteItem(Env.valueOf(env), itemId, userInfoHolder.getUser().getUserId());
@@ -183,7 +183,7 @@ public class ItemController {
       }
 
       if (permissionValidator
-          .shouldHideConfigToCurrentUser(namespace.getAppId(), namespace.getEnv().name(), namespace.getNamespaceName())) {
+          .shouldHideConfigToCurrentUser(namespace.getAppId(), namespace.getEnv().getName(), namespace.getNamespaceName())) {
         diff.setDiffs(new ItemChangeSets());
         diff.setExtInfo("You are not this project's administrator, nor you have edit or release permission for the namespace in environment: " + namespace.getEnv());
       }
@@ -249,8 +249,12 @@ public class ItemController {
     // use YamlPropertiesFactoryBean to check the yaml syntax
     TypeLimitedYamlPropertiesFactoryBean yamlPropertiesFactoryBean = new TypeLimitedYamlPropertiesFactoryBean();
     yamlPropertiesFactoryBean.setResources(new ByteArrayResource(model.getConfigText().getBytes()));
-    // this call converts yaml to properties and will throw exception if the conversion fails
-    yamlPropertiesFactoryBean.getObject();
+    try {
+      // this call converts yaml to properties and will throw exception if the conversion fails
+      yamlPropertiesFactoryBean.getObject();
+    }catch (Exception ex){
+      throw new BadRequestException(ex.getMessage());
+    }
   }
 
   private boolean isValidItem(ItemDTO item) {

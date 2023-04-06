@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Apollo Authors
+ * Copyright 2023 Apollo Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,7 +72,7 @@ public class AppNamespaceService {
   }
 
   public List<AppNamespace> findByAppId(String appId) {
-    return appNamespaceRepository.findByAppId(appId);
+    return appNamespaceRepository.findByAppIdOrderByIdAsc(appId);
   }
 
   public List<AppNamespace> findPublicNamespacesByNames(Set<String> namespaceNames) {

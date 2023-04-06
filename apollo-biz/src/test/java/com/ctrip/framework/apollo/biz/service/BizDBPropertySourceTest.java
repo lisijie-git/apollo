@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Apollo Authors
+ * Copyright 2023 Apollo Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
@@ -55,8 +54,7 @@ public class BizDBPropertySourceTest extends AbstractUnitTest {
 
   @Before
   public void initTestData() {
-    propertySource = spy(new BizDBPropertySource());
-    ReflectionTestUtils.setField(propertySource, "serverConfigRepository", serverConfigRepository);
+    propertySource = spy(new BizDBPropertySource(serverConfigRepository));
 
     List<ServerConfig> configs = Lists.newLinkedList();
 

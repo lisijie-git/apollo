@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Apollo Authors
+ * Copyright 2023 Apollo Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,14 +27,13 @@ import com.ctrip.framework.apollo.portal.spi.UserInfoHolder;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 
 @Service
 public class AppNamespaceService {
@@ -98,7 +97,7 @@ public class AppNamespaceService {
   @Transactional
   public void createDefaultAppNamespace(String appId) {
     if (!isAppNamespaceNameUnique(appId, ConfigConsts.NAMESPACE_APPLICATION)) {
-      throw new BadRequestException(String.format("App already has application namespace. AppId = %s", appId));
+      throw new BadRequestException("App already has application namespace. AppId = %s", appId);
     }
 
     AppNamespace appNs = new AppNamespace();
@@ -119,6 +118,7 @@ public class AppNamespaceService {
     return Objects.isNull(appNamespaceRepository.findByAppIdAndName(appId, namespaceName));
   }
 
+  @Transactional
   public AppNamespace createAppNamespaceInLocal(AppNamespace appNamespace) {
     return createAppNamespaceInLocal(appNamespace, true);
   }
@@ -130,7 +130,7 @@ public class AppNamespaceService {
     //add app org id as prefix
     App app = appService.load(appId);
     if (app == null) {
-      throw new BadRequestException("App not exist. AppId = " + appId);
+      throw BadRequestException.appNotExists(appId);
     }
 
     StringBuilder appNamespaceName = new StringBuilder();
@@ -146,7 +146,7 @@ public class AppNamespaceService {
     }
 
     if (!ConfigFileFormat.isValidFormat(appNamespace.getFormat())) {
-     throw new BadRequestException("Invalid namespace format. format must be properties、json、yaml、yml、xml");
+     throw BadRequestException.invalidNamespaceFormat("format must be properties、json、yaml、yml、xml");
     }
 
     String operator = appNamespace.getDataChangeCreatedBy();
@@ -233,8 +233,7 @@ public class AppNamespaceService {
   public AppNamespace deleteAppNamespace(String appId, String namespaceName) {
     AppNamespace appNamespace = appNamespaceRepository.findByAppIdAndName(appId, namespaceName);
     if (appNamespace == null) {
-      throw new BadRequestException(
-          String.format("AppNamespace not exists. AppId = %s, NamespaceName = %s", appId, namespaceName));
+      throw BadRequestException.appNamespaceNotExists( appId, namespaceName);
     }
 
     String operator = userInfoHolder.getUser().getUserId();
@@ -254,4 +253,5 @@ public class AppNamespaceService {
   public void batchDeleteByAppId(String appId, String operator) {
     appNamespaceRepository.batchDeleteByAppId(appId, operator);
   }
+
 }

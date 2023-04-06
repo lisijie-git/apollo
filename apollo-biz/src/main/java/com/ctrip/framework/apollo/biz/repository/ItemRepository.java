@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Apollo Authors
+ * Copyright 2023 Apollo Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,11 +38,13 @@ public interface ItemRepository extends PagingAndSortingRepository<Item, Long> {
   List<Item> findByNamespaceIdAndDataChangeLastModifiedTimeGreaterThan(Long namespaceId, Date date);
 
   Page<Item> findByKey(String key, Pageable pageable);
+
+  Page<Item> findByNamespaceId(Long namespaceId, Pageable pageable);
   
   Item findFirst1ByNamespaceIdOrderByLineNumDesc(Long namespaceId);
 
   @Modifying
-  @Query("update Item set isdeleted=1,DataChange_LastModifiedBy = ?2 where namespaceId = ?1")
+  @Query("update Item set IsDeleted = true, DeletedAt = ROUND(UNIX_TIMESTAMP(NOW(4))*1000), DataChange_LastModifiedBy = ?2 where NamespaceId = ?1 and IsDeleted = false")
   int deleteByNamespaceId(long namespaceId, String operator);
 
 }

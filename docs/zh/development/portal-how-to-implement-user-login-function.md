@@ -36,7 +36,7 @@ Apollo是配置管理系统，会提供权限管理（Authorization），理论�
 
 #### 1.1 配置`application-ldap.yml`
 
-解压`apollo-portal-x.x.x-github.zip`后，在`config`目录下创建`application-ldap.yml`，内容参考如下（[样例](https://github.com/apolloconfig/apollo/blob/master/apollo-portal/src/main/config/application-ldap-openldap-sample.yml)），相关的内容需要按照具体情况调整：
+解压`apollo-portal-x.x.x-github.zip`后，在`config`目录下创建`application-ldap.yml`，内容参考如下（[样例](https://github.com/apolloconfig/apollo/blob/master/apollo-portal/src/main/resources/application-ldap-openldap-sample.yml)），相关的内容需要按照具体情况调整：
 
 ```yml
 spring:
@@ -126,7 +126,7 @@ export JAVA_OPTS="$JAVA_OPTS -Dspring.profiles.active=github,ldap"
 
 #### 2.1 配置`application-ldap.yml`
 
-解压`apollo-portal-x.x.x-github.zip`后，在`config`目录下创建`application-ldap.yml`，内容参考如下（[样例](https://github.com/apolloconfig/apollo/blob/master/apollo-portal/src/main/config/application-ldap-activedirectory-sample.yml)），相关的内容需要按照具体情况调整：
+解压`apollo-portal-x.x.x-github.zip`后，在`config`目录下创建`application-ldap.yml`，内容参考如下（[样例](https://github.com/apolloconfig/apollo/blob/master/apollo-portal/src/main/resources/application-ldap-activedirectory-sample.yml)），相关的内容需要按照具体情况调整：
 
 ```yml
 spring:
@@ -166,7 +166,7 @@ export JAVA_OPTS="$JAVA_OPTS -Dspring.profiles.active=github,ldap"
 
 #### 3.1 配置`application-ldap.yml`
 
-解压`apollo-portal-x.x.x-github.zip`后，在`config`目录下创建`application-ldap.yml`，内容参考如下（[样例](https://github.com/apolloconfig/apollo/blob/master/apollo-portal/src/main/config/application-ldap-apacheds-sample.yml)），相关的内容需要按照具体情况调整：
+解压`apollo-portal-x.x.x-github.zip`后，在`config`目录下创建`application-ldap.yml`，内容参考如下（[样例](https://github.com/apolloconfig/apollo/blob/master/apollo-portal/src/main/resources/application-ldap-apacheds-sample.yml)），相关的内容需要按照具体情况调整：
 
 ```yml
 spring:
@@ -236,9 +236,10 @@ export JAVA_OPTS="$JAVA_OPTS -Dspring.profiles.active=github,ldap"
 
 ### 1. 配置 `application-oidc.yml`
 
-解压`apollo-portal-x.x.x-github.zip`后，在`config`目录下创建`application-oidc.yml`，内容参考如下（[样例](https://github.com/apolloconfig/apollo/blob/master/apollo-portal/src/main/config/application-oidc-sample.yml)），相关的内容需要按照具体情况调整：
+解压`apollo-portal-x.x.x-github.zip`后，在`config`目录下创建`application-oidc.yml`，内容参考如下（[样例](https://github.com/apolloconfig/apollo/blob/master/apollo-portal/src/main/resources/application-oidc-sample.yml)），相关的内容需要按照具体情况调整：
 
 #### 1.1 最小配置
+
 ```yml
 server:
   # 解析反向代理请求头
@@ -249,26 +250,26 @@ spring:
       client:
         provider:
           # provider-name 是 oidc 提供者的名称, 任意字符均可, registration 的配置需要用到这个名称
-          provider-name:
+          <fill-in-the-provider-name-here>:
             # 必须是 https, oidc 的 issuer-uri
             # 例如 你的 issuer-uri 是 https://host:port/auth/realms/apollo/.well-known/openid-configuration, 那么此处只需要配置 https://host:port/auth/realms/apollo 即可, spring boot 处理的时候会加上 /.well-known/openid-configuration 的后缀
             issuer-uri: https://host:port/auth/realms/apollo
         registration:
           # registration-name 是 oidc 客户端的名称, 任意字符均可, oidc 登录必须配置一个 authorization_code 类型的 registration
-          registration-name:
+          <fill-in-the-registration-name-here>:
             # oidc 登录必须配置一个 authorization_code 类型的 registration
             authorization-grant-type: authorization_code
             client-authentication-method: basic
             # client-id 是在 oidc 提供者处配置的客户端ID, 用于登录 provider
             client-id: apollo-portal
             # provider 的名称, 需要和上面配置的 provider 名称保持一致
-            provider: provider-name
+            provider: <fill-in-the-provider-name-here>
             # openid 为 oidc 登录的必须 scope, 此处可以添加其它自定义的 scope
             scope:
               - openid
             # client-secret 是在 oidc 提供者处配置的客户端密码, 用于登录 provider
             # 从安全角度考虑更推荐使用环境变量来配置, 环境变量的命名规则为: 将配置项的 key 当中的 点(.)、横杠(-)替换为下划线(_), 然后将所有字母改为大写, spring boot 会自动处理符合此规则的环境变量
-            # 例如 spring.security.oauth2.client.registration.registration-name.client-secret -> SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_NAME_VDISK_CLIENT_SECRET (REGISTRATION_NAME 可以替换为自定义的 oidc 客户端的名称)
+            # 例如 spring.security.oauth2.client.registration.<fill-in-the-registration-name-here>.client-secret -> SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_<FILL_IN_THE_REGISTRATION_NAME_HERE>_CLIENT_SECRET (<FILL_IN_THE_REGISTRATION_NAME_HERE> 可以替换为自定义的 oidc 客户端的名称)
             client-secret: d43c91c0-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 
 ```
@@ -276,6 +277,7 @@ spring:
 #### 1.2 扩展配置
 * 如果 OpenID Connect 登录服务支持 client_credentials 模式, 还可以再配置一个 client_credentials 类型的 registration, 用于 apollo-portal 作为客户端请求其它被 oidc 保护的资源
 * 如果 OpenID Connect 登录服务支持 jwt, 还可以配置 ${spring.security.oauth2.resourceserver.jwt.issuer-uri}, 以支持通过 jwt 访问 apollo-portal
+
 ```yml
 server:
   # 解析反向代理请求头
@@ -286,25 +288,25 @@ spring:
       client:
         provider:
           # provider-name 是 oidc 提供者的名称, 任意字符均可, registration 的配置需要用到这个名称
-          provider-name:
+          <fill-in-the-provider-name-here>:
             # 必须是 https, oidc 的 issuer-uri, 和 jwt 的 issuer-uri 一致的话直接引用即可, 也可以单独设置
             issuer-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}
         registration:
           # registration-name 是 oidc 客户端的名称, 任意字符均可, oidc 登录必须配置一个 authorization_code 类型的 registration
-          registration-name:
+          <fill-in-the-registration-name-here>:
             # oidc 登录必须配置一个 authorization_code 类型的 registration
             authorization-grant-type: authorization_code
             client-authentication-method: basic
             # client-id 是在 oidc 提供者处配置的客户端ID, 用于登录 provider
             client-id: apollo-portal
             # provider 的名称, 需要和上面配置的 provider 名称保持一致
-            provider: provider-name
+            provider: <fill-in-the-provider-name-here>
             # openid 为 oidc 登录的必须 scope, 此处可以添加其它自定义的 scope
             scope:
               - openid
             # client-secret 是在 oidc 提供者处配置的客户端密码, 用于登录 provider
             # 从安全角度考虑更推荐使用环境变量来配置, 环境变量的命名规则为: 将配置项的 key 当中的 点(.)、横杠(-)替换为下划线(_), 然后将所有字母改为大写, spring boot 会自动处理符合此规则的环境变量
-            # 例如 spring.security.oauth2.client.registration.registration-name.client-secret -> SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_NAME_VDISK_CLIENT_SECRET (REGISTRATION_NAME 可以替换为自定义的 oidc 客户端的名称)
+            # 例如 spring.security.oauth2.client.registration.<fill-in-the-registration-name-here>.client-secret -> SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_<FILL_IN_THE_REGISTRATION_NAME_HERE>_CLIENT_SECRET (<FILL_IN_THE_REGISTRATION_NAME_HERE> 可以替换为自定义的 oidc 客户端的名称)
             client-secret: d43c91c0-xxxx-xxxx-xxxx-xxxxxxxxxxxx
           # registration-name-client 是 oidc 客户端的名称, 任意字符均可, client_credentials 类型的 registration 为选填项, 可以不配置
           registration-name-client:
@@ -314,7 +316,7 @@ spring:
             # client-id 是在 oidc 提供者处配置的客户端ID, 用于登录 provider
             client-id: apollo-portal
             # provider 的名称, 需要和上面配置的 provider 名称保持一致
-            provider: provider-name
+            provider: <fill-in-the-provider-name-here>
             # openid 为 oidc 登录的必须 scope, 此处可以添加其它自定义的 scope
             scope:
               - openid
@@ -325,6 +327,66 @@ spring:
           # 必须是 https, jwt 的 issuer-uri
           # 例如 你的 issuer-uri 是 https://host:port/auth/realms/apollo/.well-known/openid-configuration, 那么此处只需要配置 https://host:port/auth/realms/apollo 即可, spring boot 处理的时候会自动加上 /.well-known/openid-configuration 的后缀
           issuer-uri: https://host:port/auth/realms/apollo
+```
+
+#### 1.3 用户显示名配置
+
+用户的显示名支持自定义配置, 在 `application-oidc.yml` 添加配置项即可
+
+* 可以使用的 oidc 标准 claim name
+  详见 https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims , 非标准个性化 claim
+  name 请咨询你的 OpenID Connect 登录服务管理员
+* oidc 交互式登录用户的显示名配置项为 `spring.security.oidc.user-display-name-claim-name`,
+  未配置的情况下默认取 `preferred_username`, 该字段为空则尝试获取 `name`
+* oidc jwt 方式登录用户的显示名配置项为 `spring.security.oidc.jwt-user-display-name-claim-name`,
+  无默认值
+
+##### 1.3.1 用户显示名配置示例
+
+* 例如在进行 oidc 交互式登录时使用 `name` 作为显示名, 则配置如下
+
+```yml
+spring:
+  security:
+    oidc:
+      user-display-name-claim-name: "name"
+
+```
+
+* 例如在进行 oidc 交互式登录时使用 `email` 作为显示名, 则配置如下
+
+```yml
+spring:
+  security:
+    oidc:
+      user-display-name-claim-name: "email"
+
+```
+
+* jwt 的标准 claim name (https://tools.ietf.org/html/rfc7519#section-4) 里面没有适合作为用户显示名的字段,
+  所以需要 OpenID Connect 登录服务管理员添加非标准的个性化字段
+* 例如使用 oidc jwt 登录时, OpenID Connect 登录服务提供了一个名为 `user_display_name` 的个性化字段,
+  你想要将这个字段作为显示名, 则配置如下
+
+```yml
+spring:
+  security:
+    oidc:
+      jwt-user-display-name-claim-name: "user_display_name"
+
+```
+
+* 支持同时配置 oidc 交互式登录名 和 oidc jwt 登录名
+* 例如根据登录方式不同, 进行 oidc 交互式登录时候使用 `name` 作为显示名,
+  进行 oidc jwt 登录时使用 `user_display_name` 作为显示名, 则配置如下
+
+```yml
+spring:
+  security:
+    oidc:
+      user-display-name-claim-name: "name"
+      jwt-user-display-name-claim-name: "user_display_name"
+
 ```
 
 ### 2. 配置 `startup.sh`
@@ -378,6 +440,7 @@ server {
 
 #### 3.2 检查 application-oidc.yml 配置
 在 `application-oidc.yml` 里必须存在配置项 `server.forward-headers-strategy=framework`
+
 ```yml
 server:
   # 解析反向代理请求头

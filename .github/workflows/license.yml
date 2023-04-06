@@ -1,5 +1,5 @@
 #
-# Copyright 2022 Apollo Authors
+# Copyright 2023 Apollo Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,6 +30,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Check License
-      uses: apache/skywalking-eyes@main
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: apache/skywalking-eyes/header@501a28d2fb4a9b962661987e50cf0219631b32ff

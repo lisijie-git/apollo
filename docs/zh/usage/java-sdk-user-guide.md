@@ -3,7 +3,7 @@
 # &nbsp;
 # 一、准备工作
 ## 1.1 环境要求
-    
+
 * Java: 1.8+
     * 如需运行在 Java 1.7 运行时环境，请使用 1.x 版本的 apollo 客户端，如 1.9.1
 * Guava: 20.0+
@@ -53,7 +53,7 @@ app.id=YOUR-APP-ID
 
 文件位置参考如下：
 
-![app-id-location](https://cdn.jsdelivr.net/gh/apolloconfig/apollo@master/apollo-client/doc/pic/app-id-location.png)
+![app-id-location](https://cdn.jsdelivr.net/gh/apolloconfig/apollo@master/doc/images/app-id-location.png)
 
 > 注：app.id是用来标识应用身份的唯一id，格式为string。
 
@@ -113,7 +113,7 @@ pro.meta=http://apollo.xxx.com
 
 **如果你的公司有很多应用需要接入Apollo，建议封装一个jar包，然后提供自定义的Apollo Meta Server定位逻辑，从而可以让接入Apollo的应用零配置使用。比如自己写一个`xx-company-apollo-client`，该jar包依赖`apollo-client`，在该jar包中通过spi方式定义自定义的MetaServerProvider实现，然后应用直接依赖`xx-company-apollo-client`即可。**
 
-MetaServerProvider的实现可以参考[LegacyMetaServerProvider](https://github.com/apolloconfig/apollo/blob/master/apollo-core/src/main/java/com/ctrip/framework/apollo/core/internals/LegacyMetaServerProvider.java)和[DefaultMetaServerProvider](https://github.com/apolloconfig/apollo/blob/master/apollo-client/src/main/java/com/ctrip/framework/apollo/internals/DefaultMetaServerProvider.java)。
+MetaServerProvider的实现可以参考[LegacyMetaServerProvider](https://github.com/apolloconfig/apollo/blob/master/apollo-core/src/main/java/com/ctrip/framework/apollo/core/internals/LegacyMetaServerProvider.java)和[DefaultMetaServerProvider](https://github.com/apolloconfig/apollo-java/blob/main/apollo-client/src/main/java/com/ctrip/framework/apollo/internals/DefaultMetaServerProvider.java)。
 
 #### 1.2.2.2 跳过Apollo Meta Server服务发现
 
@@ -155,7 +155,7 @@ Apollo客户端会把从服务端获取到的配置在本地文件系统缓存�
 * appId就是应用自己的appId，如100004458
 * cluster就是应用使用的集群，一般在本地模式下没有做过配置的话，就是default
 * namespace就是应用使用的配置namespace，一般是application
-![client-local-cache](https://cdn.jsdelivr.net/gh/apolloconfig/apollo@master/apollo-client/doc/pic/client-local-cache.png)
+![client-local-cache](https://cdn.jsdelivr.net/gh/apolloconfig/apollo@master/doc/images/client-local-cache.png)
 
 文件内容以properties格式存储，比如如果有两个key，一个是request.timeout，另一个是batch，那么文件内容就是如下格式：
 ```properties
@@ -377,9 +377,26 @@ apollo.label=YOUR-APOLLO-LABEL
 
 文件位置参考如下：
 
-![app-id-location](https://cdn.jsdelivr.net/gh/apolloconfig/apollo@master/apollo-client/doc/pic/app-id-location.png)
+![app-id-location](https://cdn.jsdelivr.net/gh/apolloconfig/apollo@master/doc/images/app-id-location.png)
 
 > 注：apollo.label是用来标识应用身份的标签，格式为string。
+
+#### 1.2.4.8 覆盖系统属性
+
+> 适用于2.1.0及以上版本
+
+`apollo.override-system-properties` 标识Apollo的远程属性是否应该覆盖Java的系统属性。默认为 true。
+
+配置方式按照优先级从高到低分别为：
+1. 通过Java System Property `apollo.override-system-properties`
+    * 可以通过Java的System Property `apollo.override-system-properties`来指定
+    * 在Java程序启动脚本中，可以指定`-Dapollo.override-system-properties=true`
+        * 如果是运行jar文件，需要注意格式是`java -Dapollo.override-system-properties=true -jar xxx.jar`
+    * 也可以通过程序指定，如`System.setProperty("apollo.override-system-properties", "true");`
+2. 通过Spring Boot的配置文件
+    * 可以在Spring Boot的`application.properties`或`bootstrap.properties`中指定`apollo.override-system-properties=true`
+3. 通过`app.properties`配置文件
+    * 可以在`classpath:/META-INF/app.properties`指定`apollo.override-system-properties=true`
 
 # 二、Maven Dependency
 Apollo的客户端jar包已经上传到中央仓库，应用在实际使用时只需要按照如下方式引入即可。
@@ -621,7 +638,7 @@ Spring Boot除了支持上述两种集成方式以外，还支持通过applicati
      # will inject 'application' namespace in bootstrap phase
      apollo.bootstrap.enabled = true
 ```
-   
+
 2. 注入非默认`application` namespace或多个namespace的配置示例
 ```properties
      apollo.bootstrap.enabled = true
@@ -923,7 +940,7 @@ public class AppConfig {
 }
 ```
 
-需要注意的是，`@ConfigurationProperties`如果需要在Apollo配置变化时自动更新注入的值，需要配合使用[EnvironmentChangeEvent](https://cloud.spring.io/spring-cloud-static/spring-cloud.html#_environment_changes)或[RefreshScope](https://cloud.spring.io/spring-cloud-static/spring-cloud.html#_refresh_scope)。相关代码实现，可以参考apollo-use-cases项目中的[ZuulPropertiesRefresher.java](https://github.com/ctripcorp/apollo-use-cases/blob/master/spring-cloud-zuul/src/main/java/com/ctrip/framework/apollo/use/cases/spring/cloud/zuul/ZuulPropertiesRefresher.java#L48)和apollo-demo项目中的[SampleRedisConfig.java](https://github.com/apolloconfig/apollo/blob/master/apollo-demo/src/main/java/com/ctrip/framework/apollo/demo/spring/springBootDemo/config/SampleRedisConfig.java)以及[SpringBootApolloRefreshConfig.java](https://github.com/apolloconfig/apollo/blob/master/apollo-demo/src/main/java/com/ctrip/framework/apollo/demo/spring/springBootDemo/refresh/SpringBootApolloRefreshConfig.java)
+需要注意的是，`@ConfigurationProperties`如果需要在Apollo配置变化时自动更新注入的值，需要配合使用[EnvironmentChangeEvent](https://cloud.spring.io/spring-cloud-static/spring-cloud.html#_environment_changes)或[RefreshScope](https://cloud.spring.io/spring-cloud-static/spring-cloud.html#_refresh_scope)。相关代码实现，可以参考apollo-use-cases项目中的[ZuulPropertiesRefresher.java](https://github.com/ctripcorp/apollo-use-cases/blob/master/spring-cloud-zuul/src/main/java/com/ctrip/framework/apollo/use/cases/spring/cloud/zuul/ZuulPropertiesRefresher.java#L48)和apollo-demo项目中的[SampleRedisConfig.java](https://github.com/apolloconfig/apollo-demo-java/blob/main/spring-boot-demo/src/main/java/com/apolloconfig/apollo/demo/springboot/config/SampleRedisConfig.java)以及[SpringBootApolloRefreshConfig.java](https://github.com/apolloconfig/apollo-demo-java/blob/main/spring-boot-demo/src/main/java/com/apolloconfig/apollo/demo/springboot/refresh/SpringBootApolloRefreshConfig.java)
 
 ### 3.2.3 Spring Annotation支持
 Apollo同时还增加了几个新的Annotation来简化在Spring环境中的使用。
@@ -1103,7 +1120,7 @@ appId就是应用的appId，如100004458。
 * appId就是应用自己的appId，如100004458
 * cluster就是应用使用的集群，一般在本地模式下没有做过配置的话，就是default
 * namespace就是应用使用的配置namespace，一般是application
-![client-local-cache](https://cdn.jsdelivr.net/gh/apolloconfig/apollo@master/apollo-client/doc/pic/client-local-cache.png)
+![client-local-cache](https://cdn.jsdelivr.net/gh/apolloconfig/apollo@master/doc/images/client-local-cache.png)
 
 文件内容以properties格式存储，比如如果有两个key，一个是request.timeout，另一个是batch，那么文件内容就是如下格式：
 ```properties
@@ -1187,3 +1204,19 @@ public class SpringIntegrationTest {
   }
 }
 ```
+
+# 七、apollo-client定制
+
+## 7.1 ConfigService负载均衡算法
+
+> from version 2.1.0
+
+为了满足用户使用apollo-client时，对ConfigService负载均衡算法的不同需求，
+
+我们在2.1.0版本中提供了**spi**。
+
+interface是`com.ctrip.framework.apollo.spi.ConfigServiceLoadBalancerClient`。
+
+输入是meta server返回的多个ConfigService，输出是1个ConfigService。
+
+默认服务提供是`com.ctrip.framework.apollo.spi.RandomConfigServiceLoadBalancerClient`，使用random策略，也就是随机从多个ConfigService中选择1个ConfigService。

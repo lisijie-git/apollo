@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Apollo Authors
+ * Copyright 2023 Apollo Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,8 +66,8 @@ public class AccessKeyServiceWithCache implements InitializingBean {
   private ListMultimap<String, AccessKey> accessKeyCache;
   private ConcurrentMap<Long, AccessKey> accessKeyIdCache;
 
-  @Autowired
-  public AccessKeyServiceWithCache(AccessKeyRepository accessKeyRepository, BizConfig bizConfig) {
+  public AccessKeyServiceWithCache(final AccessKeyRepository accessKeyRepository,
+      final BizConfig bizConfig) {
     this.accessKeyRepository = accessKeyRepository;
     this.bizConfig = bizConfig;
 

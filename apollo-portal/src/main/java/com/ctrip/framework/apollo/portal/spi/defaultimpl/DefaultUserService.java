@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Apollo Authors
+ * Copyright 2023 Apollo Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import com.google.common.collect.Lists;
 import com.ctrip.framework.apollo.portal.entity.bo.UserInfo;
 import com.ctrip.framework.apollo.portal.spi.UserService;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,7 +30,7 @@ import java.util.List;
 public class DefaultUserService implements UserService {
 
   @Override
-  public List<UserInfo> searchUsers(String keyword, int offset, int limit) {
+  public List<UserInfo> searchUsers(String keyword, int offset, int limit, boolean includeInactiveUsers) {
     return Collections.singletonList(assembleDefaultUser());
   }
 

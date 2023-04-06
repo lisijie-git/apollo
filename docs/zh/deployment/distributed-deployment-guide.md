@@ -480,56 +480,6 @@ META_SERVERS_OPTS="-Ddev_meta=$dev_meta -Dfat_meta=$fat_meta -Duat_meta=$uat_met
 
 位于`apollo-portal/target/`目录下的`apollo-portal-x.x.x-github.zip`
 
-##### 2.2.1.2.7 启用外部nacos服务注册中心替换内置eureka
-
-1. 修改build.sh/build.bat，将config-service和admin-service的maven编译命令更改为
-```shell
-mvn clean package -Pgithub,nacos-discovery -DskipTests -pl apollo-configservice,apollo-adminservice -am -Dapollo_profile=github,nacos-discovery -Dspring_datasource_url=$apollo_config_db_url -Dspring_datasource_username=$apollo_config_db_username -Dspring_datasource_password=$apollo_config_db_password
-```
-
-2. 分别修改apollo-configservice和apollo-adminservice安装包中config目录下的application-github.properties，配置nacos服务器地址
-```properties
-nacos.discovery.server-addr=127.0.0.1:8848
-# 更多 nacos 配置
-nacos.discovery.access-key=
-nacos.discovery.username=
-nacos.discovery.password=
-nacos.discovery.secret-key=
-nacos.discovery.namespace=
-nacos.discovery.context-path=
-```
-
-##### 2.2.1.2.8 启用外部Consul服务注册中心替换内置eureka
-
-1. 修改build.sh/build.bat，将config-service和admin-service的maven编译命令更改为
-```shell
-mvn clean package -Pgithub -DskipTests -pl apollo-configservice,apollo-adminservice -am -Dapollo_profile=github,consul-discovery -Dspring_datasource_url=$apollo_config_db_url -Dspring_datasource_username=$apollo_config_db_username -Dspring_datasource_password=$apollo_config_db_password
-```
-
-2. 分别修改apollo-configservice和apollo-adminservice安装包中config目录下的application-github.properties，配置consul服务器地址
-```properties
-spring.cloud.consul.host=127.0.0.1
-spring.cloud.consul.port=8500
-```
-
-##### 2.2.1.2.9 启用外部Zookeeper服务注册中心替换内置eureka
-1. 修改build.sh/build.bat，将`config-service`和`admin-service`的maven编译命令更改为
-```shell
-mvn clean package -Pgithub -DskipTests -pl apollo-configservice,apollo-adminservice -am -Dapollo_profile=github,zookeeper-discovery -Dspring_datasource_url=$apollo_config_db_url -Dspring_datasource_username=$apollo_config_db_username -Dspring_datasource_password=$apollo_config_db_password
-```
-2. 分别修改apollo-configservice和apollo-adminservice安装包中config目录下的application-github.properties，配置zookeeper服务器地址
-```properties
-spring.cloud.zookeeper.connect-string=127.0.0.1:2181
-```
-3.Zookeeper版本说明
-* 支持Zookeeper3.5.x以上的版本;
-* 如果apollo-configservice应用启动报端口占用,请检查Zookeeper的如下配置;
-> 注：Zookeeper3.5.0新增了内置的[AdminServer](https://zookeeper.apache.org/doc/r3.5.0-alpha/zookeeperAdmin.html#sc_adminserver_config)
-```properties
-admin.enableServer
-admin.serverPort
-```
-
 ### 2.2.2 部署Apollo服务端
 
 #### 2.2.2.1 部署apollo-configservice
@@ -577,6 +527,208 @@ export JAVA_OPTS="-server -Xms4096m -Xmx4096m -Xss256k -XX:MetaspaceSize=128m -X
 > 注2：如要调整服务的日志输出路径，可以修改scripts/startup.sh和apollo-portal.conf中的`LOG_DIR`。
 
 > 注3：如要调整服务的监听端口，可以修改scripts/startup.sh中的`SERVER_PORT`。
+
+### 2.2.3 使用其它服务注册中心替换内置eureka
+
+#### 2.2.3.1 nacos-discovery
+
+> 适用于1.8.0及以上版本
+
+启用外部nacos服务注册中心替换内置eureka
+
+> 注意：需要重新打包
+
+1. 修改build.sh/build.bat，将config-service和admin-service的maven编译命令更改为
+```shell
+mvn clean package -Pgithub,nacos-discovery -DskipTests -pl apollo-configservice,apollo-adminservice -am -Dapollo_profile=github,nacos-discovery -Dspring_datasource_url=$apollo_config_db_url -Dspring_datasource_username=$apollo_config_db_username -Dspring_datasource_password=$apollo_config_db_password
+```
+
+2. 分别修改apollo-configservice和apollo-adminservice安装包中config目录下的application-github.properties，配置nacos服务器地址
+```properties
+nacos.discovery.server-addr=127.0.0.1:8848
+# 更多 nacos 配置
+nacos.discovery.access-key=
+nacos.discovery.username=
+nacos.discovery.password=
+nacos.discovery.secret-key=
+nacos.discovery.namespace=
+nacos.discovery.context-path=
+```
+
+#### 2.2.3.2 consul-discovery
+
+> 适用于1.9.0及以上版本
+
+启用外部Consul服务注册中心替换内置eureka
+
+##### 2.2.3.2.1 2.1.0 及以上版本
+
+1. 修改`apollo-configservice-x.x.x-github.zip`和`apollo-adminservice-x.x.x-github.zip`解压后的`config/application.properties`，取消注释，把
+    ```properties
+    #spring.profiles.active=github,consul-discovery
+    ```
+
+    变成
+
+    ```properties
+    spring.profiles.active=github,consul-discovery
+    ```
+
+2. 分别修改apollo-configservice和apollo-adminservice安装包中config目录下的application-github.properties，配置consul服务器地址
+```properties
+spring.cloud.consul.host=127.0.0.1
+spring.cloud.consul.port=8500
+```
+
+##### 2.2.3.2.2 2.1.0 之前的版本
+
+> 注意：需要重新打包
+
+1. 修改build.sh/build.bat，将config-service和admin-service的maven编译命令更改为
+```shell
+mvn clean package -Pgithub -DskipTests -pl apollo-configservice,apollo-adminservice -am -Dapollo_profile=github,consul-discovery -Dspring_datasource_url=$apollo_config_db_url -Dspring_datasource_username=$apollo_config_db_username -Dspring_datasource_password=$apollo_config_db_password
+```
+
+2. 分别修改apollo-configservice和apollo-adminservice安装包中config目录下的application-github.properties，配置consul服务器地址
+```properties
+spring.cloud.consul.host=127.0.0.1
+spring.cloud.consul.port=8500
+```
+
+#### 2.2.3.3 zookeeper-discovery
+
+> 适用于2.0.0及以上版本
+
+启用外部Zookeeper服务注册中心替换内置eureka
+
+##### 2.2.3.3.1 2.1.0 及以上版本
+
+1. 修改`apollo-configservice-x.x.x-github.zip`和`apollo-adminservice-x.x.x-github.zip`解压后的`config/application.properties`，取消注释，把
+    ```properties
+    #spring.profiles.active=github,zookeeper-discovery
+    ```
+
+    变成
+
+    ```properties
+    spring.profiles.active=github,zookeeper-discovery
+    ```
+
+2. 分别修改apollo-configservice和apollo-adminservice安装包中config目录下的application-github.properties，配置zookeeper服务器地址
+```properties
+spring.cloud.zookeeper.connect-string=127.0.0.1:2181
+```
+3.Zookeeper版本说明
+* 支持Zookeeper3.5.x以上的版本;
+* 如果apollo-configservice应用启动报端口占用,请检查Zookeeper的如下配置;
+> 注：Zookeeper3.5.0新增了内置的[AdminServer](https://zookeeper.apache.org/doc/r3.5.0-alpha/zookeeperAdmin.html#sc_adminserver_config)
+```properties
+admin.enableServer
+admin.serverPort
+```
+
+##### 2.2.3.3.2 2.1.0 之前的版本
+
+1. 修改build.sh/build.bat，将`config-service`和`admin-service`的maven编译命令更改为
+```shell
+mvn clean package -Pgithub -DskipTests -pl apollo-configservice,apollo-adminservice -am -Dapollo_profile=github,zookeeper-discovery -Dspring_datasource_url=$apollo_config_db_url -Dspring_datasource_username=$apollo_config_db_username -Dspring_datasource_password=$apollo_config_db_password
+```
+2. 分别修改apollo-configservice和apollo-adminservice安装包中config目录下的application-github.properties，配置zookeeper服务器地址
+```properties
+spring.cloud.zookeeper.connect-string=127.0.0.1:2181
+```
+3.Zookeeper版本说明
+* 支持Zookeeper3.5.x以上的版本;
+* 如果apollo-configservice应用启动报端口占用,请检查Zookeeper的如下配置;
+> 注：Zookeeper3.5.0新增了内置的[AdminServer](https://zookeeper.apache.org/doc/r3.5.0-alpha/zookeeperAdmin.html#sc_adminserver_config)
+```properties
+admin.enableServer
+admin.serverPort
+```
+
+#### 2.2.3.4 custom-defined-discovery
+
+> 适用于2.0.0及以上版本
+
+启用custom-defined-discovery替换内置eureka
+
+##### 2.2.3.4.1 2.1.0 及以上版本
+
+1. 修改`apollo-configservice-x.x.x-github.zip`和`apollo-adminservice-x.x.x-github.zip`解压后的`config/application.properties`，取消注释，把
+    ```properties
+    #spring.profiles.active=github,custom-defined-discovery
+    ```
+
+    变成
+
+    ```properties
+    spring.profiles.active=github,custom-defined-discovery
+    ```
+
+2. 配置自定义的 config-service 与 admin-service 的访问地址有两种方式：一种在mysql数据库ApolloConfigDB，表ServerConfig当中写入两条数据。
+```sql
+INSERT INTO `ApolloConfigDB`.`ServerConfig` (`Key`, `Value`, `Comment`) VALUES ('apollo.config-service.url', 'http://apollo-config-service', 'ConfigService 访问地址');
+INSERT INTO `ApolloConfigDB`.`ServerConfig` (`Key`, `Value`, `Comment`) VALUES ('apollo.admin-service.url', 'http://apollo-admin-service', 'AdminService 访问地址');
+```
+另外一种修改apollo-configservice安装包中config目录下的application-github.properties
+```properties
+apollo.config-service.url=http://apollo-config-service
+apollo.admin-service.url=http://apollo-admin-service
+```
+
+##### 2.2.3.4.2 2.1.0 之前的版本
+
+> 注意：需要重新打包
+
+1. 修改build.sh/build.bat，将`config-service`和`admin-service`的maven编译命令更改为
+```shell
+mvn clean package -Pgithub -DskipTests -pl apollo-configservice,apollo-adminservice -am -Dapollo_profile=github,custom-defined-discovery -Dspring_datasource_url=$apollo_config_db_url -Dspring_datasource_username=$apollo_config_db_username -Dspring_datasource_password=$apollo_config_db_password
+```
+2. 配置自定义的 config-service 与 admin-service 的访问地址有两种方式：一种在mysql数据库ApolloConfigDB，表ServerConfig当中写入两条数据。
+```sql
+INSERT INTO `ApolloConfigDB`.`ServerConfig` (`Key`, `Value`, `Comment`) VALUES ('apollo.config-service.url', 'http://apollo-config-service', 'ConfigService 访问地址');
+INSERT INTO `ApolloConfigDB`.`ServerConfig` (`Key`, `Value`, `Comment`) VALUES ('apollo.admin-service.url', 'http://apollo-admin-service', 'AdminService 访问地址');
+```
+另外一种修改apollo-configservice安装包中config目录下的application-github.properties
+```properties
+apollo.config-service.url=http://apollo-config-service
+apollo.admin-service.url=http://apollo-admin-service
+```
+
+
+#### 2.2.3.5 database-discovery
+
+> 仅支持 2.1.0 及以上版本
+
+启用database-discovery替换内置eureka
+
+Apollo支持使用内部的数据库表作为注册中心，不依赖第三方的注册中心
+
+1. 修改`apollo-configservice-x.x.x-github.zip`和`apollo-adminservice-x.x.x-github.zip`解压后的`config/application.properties`，取消注释，把
+    ```properties
+    #spring.profiles.active=github,database-discovery
+    ```
+
+    变成
+
+    ```properties
+    spring.profiles.active=github,database-discovery
+    ```
+
+2. （可选）在多机房部署时，
+   如果你需要apollo客户端只读取同机房内的Config Service，
+   你可以在Config Service和Admin Service安装包中`config/application-github.properties`新增一条配置
+    ```properties
+    apollo.service.registry.cluster=与apollo的Cluster同名
+    ```
+
+3. （可选）如果你希望自定义Config Service和Admin Service给Client使用的uri，
+    例如在内网部署时，
+    如果不希望暴露内网ip，
+    你可以在Config Service和Admin Service安装包中`config/application-github.properties`新增一条配置
+    ```properties
+    apollo.service.registry.uri=http://你的ip或者域名:${server.port}/
+    ```
 
 ## 2.3 Docker部署
 ### 2.3.1 1.7.0及以上版本
@@ -1219,12 +1371,6 @@ portal上“帮助”链接的地址，默认是Apollo github的wiki首页，可
 
 ### 3.1.12 admin-service.access.tokens - 设置apollo-portal访问各环境apollo-adminservice所需的access token
 
-### 3.1.13 searchByItem.switch - 控制台搜索框是否支持按配置项搜索
-
-默认为 true，可以方便的按配置项快速搜索配置
-
-如果设置为 false，则关闭此功能 
-
 > 适用于1.7.1及以上版本
 
 如果对应环境的apollo-adminservice开启了[访问控制](#_326-admin-serviceaccesscontrolenabled-配置apollo-adminservice是否开启访问控制)，那么需要在此配置apollo-portal访问该环境apollo-adminservice所需的access token，否则会访问失败
@@ -1237,6 +1383,13 @@ portal上“帮助”链接的地址，默认是Apollo github的wiki首页，可
     "pro" : "ad0234829205b9033196ba818f7a872b"
 }
 ```
+
+### 3.1.13 searchByItem.switch - 控制台搜索框是否支持按配置项搜索
+
+默认为 true，可以方便的按配置项快速搜索配置
+
+如果设置为 false，则关闭此功能
+
 
 ## 3.2 调整ApolloConfigDB配置
 配置项统一存储在ApolloConfigDB.ServerConfig表中，需要注意每个环境的ApolloConfigDB.ServerConfig都需要单独配置，修改完一分钟实时生效。
@@ -1289,7 +1442,17 @@ http://5.5.5.5:8080/eureka/,http://6.6.6.6:8080/eureka/
 
 默认为false，开启前请先评估总配置大小并调整config service内存配置。
 
-> 开启缓存后必须确保应用中配置的app.id大小写正确，否则将获取不到正确的配置
+> 开启缓存后必须确保应用中配置的`app.id`、`apollo.cluster`大小写正确，否则将获取不到正确的配置，另可参考`config-service.cache.key.ignore-case`配置做兼容处理。
+
+> `config-service.cache.enabled` 配置调整必须重启 config service 才能生效
+
+#### 3.2.3.1 config-service.cache.key.ignore-case - 是否忽略配置缓存key的大小写
+> 适用于2.2.0及以上版本
+
+该配置作用于`config-service.cache.enabled`为 true 时，用于控制配置缓存key是否忽略大小写。
+默认为 false，即缓存键大小写严格匹配。此时需要确保应用中配置的`app.id`、`apollo.cluster`大小写正确，否则将获取不到正确的配置。可配置为 true, 则忽略大小写。
+
+> 这个配置用于兼容未开启缓存时的配置获取逻辑，因为 MySQL 数据库查询默认字符串匹配大小写不敏感。如果开启了缓存，且用了 MySQL，建议配置 true。如果你 Apollo 使用的数据库字符串匹配大小写敏感，那么必须保持默认配置 false，否则将获取不到配置。
 
 ### 3.2.4 item.key.length.limit - 配置项 key 最大长度限制
 
@@ -1330,3 +1493,56 @@ admin-service.access.tokens=098f6bcd4621d373cade4e832627b4f6,ad0234829205b903319
 > 适用于2.0.0及以上版本
 
 默认值为60，单位为秒。由于密钥认证时需要校验时间，客户端与服务端的时间可能存在时间偏差，如果偏差太大会导致认证失败，此配置可以配置容忍的时间偏差大小，默认为60秒。
+
+### 3.2.9 apollo.eureka.server.security.enabled - 配置是否开启eureka server的登录认证
+
+> 适用于2.1.0及以上版本
+
+默认为false，如果希望提升安全性（比如公网可访问的场景），可以设置该配置项为true启用登录认证。
+
+需要注意的是，开启登录认证后，[eureka.service.url](#_321-eurekaserviceurl-eureka服务url)中的地址需要配置用户名和密码，如：
+
+```
+http://some-user-name:some-password@1.1.1.1:8080/eureka/,http://some-user-name:some-password@2.2.2.2:8080/eureka/
+```
+其中`some-user-name`和`some-password`需要和`apollo.eureka.server.security.username`以及`apollo.eureka.server.security.password`的配置项一致。
+
+修改完需要重启生效。
+
+### 3.2.10 apollo.eureka.server.security.username - 配置eureka server的登录用户名
+
+> 适用于2.1.0及以上版本
+
+配置eureka server的登录用户名，需要和[apollo.eureka.server.security.enabled](#_329-apolloeurekaserversecurityenabled-配置是否开启eureka-server的登录认证)一起使用。
+
+修改完需要重启生效。
+
+> 注意用户名不能配置为apollo
+
+### 3.2.11 apollo.eureka.server.security.password - 配置eureka server的登录密码
+
+> 适用于2.1.0及以上版本
+
+配置eureka server的登录密码，需要和[apollo.eureka.server.security.enabled](#_329-apolloeurekaserversecurityenabled-配置是否开启eureka-server的登录认证)一起使用。
+
+修改完需要重启生效。
+
+### 3.2.12 apollo.release-history.retention.size - 配置发布历史的保留数量
+
+> 适用于2.2.0及以上版本
+
+默认为 -1，表示不限制保留数量。如果配置为正整数(最小值为 1，必须保留一条历史记录，保障基本的配置功能)，则只会保留最近的指定数量的发布历史。这是为了防止发布历史过多导致数据库压力过大，建议根据业务对配置回滚的需求来配置该值。该配置项是全局的，清理时是以 appId+clusterName+namespaceName+branchName 为维度清理的。
+
+### 3.2.13 apollo.release-history.retention.size.override - 细粒度配置发布历史的保留数量
+
+> 适用于2.2.0及以上版本
+
+此配置用来覆盖 `apollo.release-history.retention.size` 的配置，做到细粒度控制 appId+clusterName+namespaceName+branchName 的发布历史保留数量，配置的值是一个 JSON 格式，JSON 的 key 为 appId、clusterName、namespaceName、branchName 使用 + 号的拼接值，格式如下：
+```
+json
+{
+  "kl+bj+namespace1+bj": 10,
+  "kl+bj+namespace2+bj": 20
+}
+```
+以上配置指定了 appId=kl、clusterName=bj、namespaceName=namespace1、branchName=bj 的发布历史保留数量为 10，appId=kl、clusterName=bj、namespaceName=namespace2、branchName=bj 的发布历史保留数量为 20，branchName 一般等于 clusterName，只有灰度发布时才会不同，灰度发布的 branchName 需要查询数据库 ReleaseHistory 表确认。
