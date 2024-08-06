@@ -1,5 +1,5 @@
 #
-# Copyright 2023 Apollo Authors
+# Copyright 2024 Apollo Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ server:
 
 logging:
   file:
-    name: /opt/logs/100003171/apollo-configservice.log
+    name: /opt/logs/apollo-configservice.log
 
 eureka:
   instance:

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Apollo Authors
+ * Copyright 2024 Apollo Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -917,7 +917,6 @@ function directive($window, $translate, toastr, AppUtil, EventManager, Permissio
 
             //normal release and gray release
             function publish(namespace) {
-
                 if (!namespace.hasReleasePermission) {
                     AppUtil.showModal('#releaseNoPermissionDialog');
                     return;
@@ -989,16 +988,8 @@ function directive($window, $translate, toastr, AppUtil, EventManager, Permissio
                     })
                 },
                 onChange: function (e) {
-                    if ((e[0].action === 'insert') && (scope.namespace.hasOwnProperty("editText")) && (scope.namespace.editText.length === 0)) {
-                        let text = ''
-                        for (let i = 0; i < e[0].lines.length; i++) {
-                            if (i === 0) {
-                                text = e[0].lines[0]
-                            } else {
-                                text += '\r\n' + e[0].lines[i]
-                            }
-                        }
-                        scope.namespace.editText = text
+                    if ((e[0].action === 'insert') && (scope.namespace.hasOwnProperty("editText"))) {
+                        scope.namespace.editText = e[1].session.getValue();
                     }
 
                 }

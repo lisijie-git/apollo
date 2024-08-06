@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Apollo Authors
+ * Copyright 2024 Apollo Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,9 @@ directive_module.directive('apollodiff',
                     var oldStr = scope.oldStr == undefined ? '' : scope.oldStr;
                     var newStr = scope.newStr == undefined ? '' : scope.newStr;
 
-                    var diff = JsDiff.diffLines(oldStr, newStr),
+                    var oldStrRes = oldStr.replace(/\r/g, "");
+                    var newStrRes = newStr.replace(/\r/g, "");
+                    var diff = JsDiff.diffLines(oldStrRes, newStrRes),
                         fragment = document.createDocumentFragment();
 
                     diff.forEach(function (part) {

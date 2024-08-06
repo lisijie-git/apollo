@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Apollo Authors
+ * Copyright 2024 Apollo Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,4 +64,10 @@ public class NotFoundException extends AbstractApolloHttpException {
     return new NotFoundException("app not found for appId:%s", appId);
   }
 
+  public static NotFoundException roleNotFound(String roleName) {
+    return new NotFoundException(
+        "role not found for roleName:%s, please check apollo portal DB table 'Role'",
+        roleName
+    );
+  }
 }

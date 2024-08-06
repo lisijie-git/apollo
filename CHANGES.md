@@ -2,27 +2,18 @@ Changes by Version
 ==================
 Release Notes.
 
-Apollo 2.2.0
+Apollo 2.3.0
 
 ------------------
-* [Fix the problem of inconsistent length of appId column](https://github.com/apolloconfig/apollo/pull/4725)
-* [Bump springcloud springboot version to solve cve problems](https://github.com/apolloconfig/apollo/pull/4712)
-* [rename mysql-connector-java to mysql-connector-j](https://github.com/apolloconfig/apollo/pull/4748)
-* [Bump springboot version from 2.7.8 to 2.7.9](https://github.com/apolloconfig/apollo/pull/4750)
-* [[Multi-Database Support] Without Reliance on globally_quoted_identifiers Variable](https://github.com/apolloconfig/apollo/pull/4749)
-* [[Multi-Database Support] Without Reliance on boolean integer compare](https://github.com/apolloconfig/apollo/pull/4757)
-* [[Multi-Database Support] package postgre h2 dependency](https://github.com/apolloconfig/apollo/pull/4763)
-* [[Multi-Database Support] Optimize table case](https://github.com/apolloconfig/apollo/pull/4768)
-* [Fix OIDC logout unnecessary redirect](https://github.com/apolloconfig/apollo/pull/4773)
-* [[Multi-Database Support] Introduce h2 postgre profile properties to let user config database config](https://github.com/apolloconfig/apollo/pull/4766)
-* [[Multi-Database Support] Optimize column define case sensitivity](https://github.com/apolloconfig/apollo/pull/4776)
-* [[Multi-Database Support][pg] Where clause need escape, otherwise will request postgre use lowwer case](https://github.com/apolloconfig/apollo/pull/4780)
-* [Misc dependency updates](https://github.com/apolloconfig/apollo/pull/4784)
-* [Fix the problem that the deletion failure of the system rights management page does not prompt](https://github.com/apolloconfig/apollo/pull/4803)
-* [Fix the issue of the system permission management page retrieving non-existent users](https://github.com/apolloconfig/apollo/pull/4802)
-* [Add release history cleaning function](https://github.com/apolloconfig/apollo/pull/4813)
-* [[Multi-Database Support][pg] Make JdbcUserDetailsManager compat with postgre](https://github.com/apolloconfig/apollo/pull/4790)
-* [Add a configuration config-service.cache.key.ignore-case to control whether the cache key is case-sensitive](https://github.com/apolloconfig/apollo/pull/4820)
+* [Fix circular references on LdapAutoConfiguration](https://github.com/apolloconfig/apollo/pull/5055)
+* [Add comment for clusters and UI display](https://github.com/apolloconfig/apollo/pull/5072)
+* [Fix the issue that the length of private namespaces are mis-calculated](https://github.com/apolloconfig/apollo/pull/5078)
+* [apollo assembly optimization](https://github.com/apolloconfig/apollo/pull/5035)
+* [update the config item table column width](https://github.com/apolloconfig/apollo/pull/5131)
+* [sync apollo portal server config to apollo quick start server](https://github.com/apolloconfig/apollo/pull/5134)
+* [Fix the role permission deletion issue when appid contains '_'](https://github.com/apolloconfig/apollo/pull/5150)
+* [fix: -XX:HeapDumpPath doesn't ready when meet OOM](https://github.com/apolloconfig/apollo/pull/5157)
+* [Fix the error occurred when using configuration retention feature](https://github.com/apolloconfig/apollo/pull/5162)
 
 ------------------
-All issues and pull requests are [here](https://github.com/apolloconfig/apollo/milestone/13?closed=1)
+All issues and pull requests are [here](https://github.com/apolloconfig/apollo/milestone/14?closed=1)
